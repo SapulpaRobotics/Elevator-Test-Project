@@ -5,11 +5,51 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
+
 public class ExampleSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-  public ExampleSubsystem() {}
+
+  SparkFlex elevator1 = new SparkFlex(5, MotorType.kBrushless);
+  SparkFlex elevator2 = new SparkFlex(6, MotorType.kBrushless);
+
+  SparkFlexConfig elevator1Config = new SparkFlexConfig();
+  SparkFlexConfig elevator2Config = new SparkFlexConfig();
+
+
+  public ExampleSubsystem() {
+
+    elevator1Config
+    .inverted(false)
+    .idleMode(IdleMode.kBrake);
+
+    elevator1.configure(elevator1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    elevator2Config
+    .inverted(false)
+    .idleMode(IdleMode.kBrake)
+    .follow(elevator1, true);
+
+    elevator2.configure(elevator2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+  }
+
+  //#region Control Methods
+
+  public void setElevatorSpeed(double speed) {
+    elevator1.set(speed);
+  }
+
+  public void stopElevatorSpeed() {
+    elevator1.stopMotor();
+  }
 
   /**
    * Example command factory method.
@@ -23,6 +63,14 @@ public class ExampleSubsystem extends SubsystemBase {
         () -> {
           /* one-time action goes here */
         });
+  }
+
+  public Command setElevatorSpeedCommand(double speed) {
+    return Commands.runOnce(() -> setElevatorSpeed(speed));
+  }
+
+  public Command stopElevatorSpeedCommand() {
+    return Commands.runOnce(() -> stopElevatorSpeed());
   }
 
   /**
