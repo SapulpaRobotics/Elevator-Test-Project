@@ -53,6 +53,14 @@ public class RobotContainer {
     .onFalse(ExampleSubsystem.stopElevatorSpeedCommand());
     m_driverController.b().whileTrue(ExampleSubsystem.setElevatorSpeedCommand(-.5))
     .onFalse(ExampleSubsystem.stopElevatorSpeedCommand());
+    m_driverController.x().whileTrue(ExampleSubsystem.setCoralIntakeSpeedCommand(.5))
+    .onFalse(ExampleSubsystem.stopCoralIntakeSpeedCommand());
+    m_driverController.y().whileTrue(ExampleSubsystem.setCoralIntakeSpeedCommand(-.5))
+    .onFalse(ExampleSubsystem.stopCoralIntakeSpeedCommand());
+    m_driverController.leftBumper().whileTrue(ExampleSubsystem.setCoralIntakeRotateSpeedCommand(.25))
+    .onFalse(ExampleSubsystem.stopCoralIntakeRotateSpeedCommand());
+    m_driverController.rightBumper().whileTrue(ExampleSubsystem.setCoralIntakeRotateSpeedCommand(-.25))
+    .onFalse(ExampleSubsystem.stopCoralIntakeRotateSpeedCommand());
   }
 
   /**

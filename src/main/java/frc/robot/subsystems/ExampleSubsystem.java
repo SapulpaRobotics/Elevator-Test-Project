@@ -11,17 +11,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class ExampleSubsystem extends SubsystemBase {
 
   SparkFlex elevator1 = new SparkFlex(5, MotorType.kBrushless);
   SparkFlex elevator2 = new SparkFlex(6, MotorType.kBrushless);
+  SparkMax coralIntake = new SparkMax(7, MotorType.kBrushless);
+  SparkFlex coralIntakeRotate = new SparkFlex(8, MotorType.kBrushless);
 
   SparkFlexConfig elevator1Config = new SparkFlexConfig();
   SparkFlexConfig elevator2Config = new SparkFlexConfig();
+  SparkMaxConfig coralIntakeConfig = new SparkMaxConfig();
+  SparkFlexConfig coralIntakeRotateConfig = new SparkFlexConfig();
 
 
   public ExampleSubsystem() {
@@ -39,6 +45,17 @@ public class ExampleSubsystem extends SubsystemBase {
 
     elevator2.configure(elevator2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+    coralIntakeConfig
+    .inverted(false)
+    .idleMode(IdleMode.kBrake);
+
+    coralIntake.configure(coralIntakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    coralIntakeRotateConfig
+    .inverted(false)
+    .idleMode(IdleMode.kBrake);
+
+    coralIntakeRotate.configure(coralIntakeRotateConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   //#region Control Methods
@@ -49,6 +66,22 @@ public class ExampleSubsystem extends SubsystemBase {
 
   public void stopElevatorSpeed() {
     elevator1.stopMotor();
+  }
+
+  public void setCoralIntakeSpeed(double speed) {
+    coralIntake.set(speed);
+  }
+
+  public void stopCoralIntakeSpeed() {
+    coralIntake.stopMotor();
+  }
+
+  public void setCoralIntakeRotateSpeed(double speed) {
+    coralIntakeRotate.set(speed);
+  }
+
+  public void stopCoralIntakeRotateSpeed() {
+    coralIntakeRotate.stopMotor();
   }
 
   /**
@@ -71,6 +104,22 @@ public class ExampleSubsystem extends SubsystemBase {
 
   public Command stopElevatorSpeedCommand() {
     return Commands.runOnce(() -> stopElevatorSpeed());
+  }
+
+  public Command setCoralIntakeSpeedCommand(double speed) {
+    return Commands.runOnce(() -> setCoralIntakeSpeed(speed));
+  }
+
+  public Command stopCoralIntakeSpeedCommand() {
+    return Commands.runOnce(() -> stopCoralIntakeSpeed());
+  }
+
+  public Command setCoralIntakeRotateSpeedCommand(double speed) {
+    return Commands.runOnce(() -> setCoralIntakeRotateSpeed(speed));
+  }
+
+  public Command stopCoralIntakeRotateSpeedCommand() {
+    return Commands.runOnce(() -> stopCoralIntakeRotateSpeed());
   }
 
   /**
